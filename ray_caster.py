@@ -6,9 +6,9 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 textures = {
-    '0' : pygame.image.load('wall.jpg'),
-    '1' : pygame.image.load('checkpoint.jpg'),
-    '2' : pygame.image.load('dark.jpg'),
+    '0' : pygame.image.load('img/wall.jpg'),
+    '1' : pygame.image.load('img/checkpoint.jpg'),
+    '2' : pygame.image.load('img/dark.jpg'),
 }
 
 class RayCaster(object):
@@ -130,16 +130,19 @@ screen.blit(s, (0, 0))
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Arial", 30)
 
+# function for updating the FPS
 def update_FPS():
     fps = str(int(clock.get_fps()))
     fps = font.render(fps, 1, pygame.Color("white"))
     return fps
 
+# initialize Ray Caster
 r = RayCaster(screen)
 r.load_map('map.txt')
 
 isRunning = True
 
+# variables for continous moving
 move_forwards = False
 move_backwards = False
 move_left = False
@@ -147,31 +150,44 @@ move_right = False
 turn_right = False
 turn_left = False
 
-startscreen = pygame.image.load('background.jpg')
-start_button = Button((50, 50, 50), 210, 200, 150, 50, 'Start')
-quit_button = Button((0, 0, 0), 210, 260, 150, 50, 'Quit')
+# load start screen image
+startscreen = pygame.image.load('img/background.jpg')
 startscreen = pygame.transform.scale(startscreen, (1000, 500))
 screen.blit(startscreen, (0,0))
+
+# logo on low right corner
+logo = pygame.image.load('img/logo.png')
+logo = pygame.transform.scale(logo, (100, 100))
+screen.blit(logo, (900, 390))
+
+# initialize buttons
+start_button = Button((50, 50, 50), 210, 200, 150, 50, 'Start')
+quit_button = Button((0, 0, 0), 210, 260, 150, 50, 'Quit')
 
 end_it = False
 button_selected = 'START'
 
+# start screen cycle
 while (end_it == False):
     # draw buttons
     start_button.draw(screen, (255, 255, 255))
     quit_button.draw(screen, (255, 255, 255))
     
     # show title
-    myfont = pygame.font.SysFont("Britannic Bold", 40)
+    myfont = pygame.font.SysFont("Britannic Bold", 60)
     nlabel = myfont.render("Castle Escape", 200, (255, 255, 255))
+    screen.blit(nlabel, (145, 150))
 
+    # check for input
     for event in pygame.event.get():
         position = pygame.mouse.get_pos()
         
+        # quit game
         if event.type == pygame.QUIT:
             isRunning = False
             end_it = True
 
+        # manage button clicks
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if start_button.isOver(position):
                 end_it = True
@@ -179,6 +195,7 @@ while (end_it == False):
                 end_it = True
                 isRunning = False
 
+        # manage mouse movements
         elif event.type == pygame.MOUSEMOTION:
             if start_button.isOver(position):
                 start_button.color = (50, 50, 50)
@@ -190,6 +207,7 @@ while (end_it == False):
             else:
                 quit_button.color = (0, 0, 0)
 
+        # manage keyboard key's clicks
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 isRunning = False
@@ -207,7 +225,6 @@ while (end_it == False):
                     isRunning = False
                 end_it = True
     
-    screen.blit(nlabel, (190, 150))
     pygame.display.flip()
 
 
